@@ -102,5 +102,6 @@ public class GraphInput {
           SimpleGraph G;
           G = new SimpleGraph();
           LoadSimpleGraph(G, args[0]);
+          
     }
 }
