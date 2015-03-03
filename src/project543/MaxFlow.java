@@ -1,20 +1,29 @@
 package project543;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
+
+/**
+* A class to find the maximum flow of a flow network using F-F, scaling max flow, and preflow algorithm
+*/
 public class MaxFlow {
 	private FlowNetwork f;
 	
+	/**
+     * Constructor
+     * @param flow network f
+     */
 	public MaxFlow(FlowNetwork f){
 		this.f=f;
 	}
 	
+	/**
+     * F-F algorithm to find the maximum flow
+     */
 	public void F_F(){
 		Iterator m;
 		Edge e;
-		ArrayList<Vertex> path = new ArrayList<Vertex>();
+		LinkedList<Vertex> path = new LinkedList<Vertex>();
 		int d = f.DFSforF_F(path);
 		while(path.size()>1){
 			f.Augment(path, d);
@@ -32,13 +41,16 @@ public class MaxFlow {
 		System.out.println("The value of the flow: "+ f.getFlow());
 	}
 	
+	/**
+     * Scaling max flow algorithm
+     */
 	public void Scaling(int maxCapacity){
 		int n = (int)(Math.log(maxCapacity)/Math.log(2));
 		int delta = (int)Math.pow(2, n);
 		Iterator m;
 		Edge e;
 		while(delta>0){
-			ArrayList<Vertex> path = f.DFS(delta);
+			LinkedList<Vertex> path = f.DFS(delta);
 			while(path.size()>1){
 				f.Augment(path, delta);
 				for(m=f.getGraph().edges();m.hasNext();){
@@ -55,5 +67,25 @@ public class MaxFlow {
 			delta/=2;
 		}
 		System.out.println("The value of the flow: "+ f.getFlow());
+	}
+	
+	/**
+     *Preflow algorithm to find the maximum flow
+     */
+	public void preFlow(){
+		f.InitialPreFlow();
+		Vertex v = f.vertexWithExcess();
+		int max = f.getGraph().numVertices();
+		while(v!=null){
+			while(!f.push(v)){
+				int[] label = (int[]) v.getData();
+				if(label[1]==max+1)
+					break;
+				f.labeling(v);
+			}
+			v = f.vertexWithExcess();
+		}
+		int flowValue = f.getFlowValue();
+		System.out.println("The value of the flow: "+ flowValue);
 	}
 }
