@@ -79,13 +79,13 @@ public class MaxFlow {
 		while(v!=null){
 			while(!f.push(v)){
 				int[] label = (int[]) v.getData();
-				if(label[1]==max+1)
+				if(label[1]==2*max+1) //the maximum label is 2*|V|+1
 					break;
 				f.labeling(v);
 			}
 			v = f.vertexWithExcess();
 		}
-		int flowValue = f.getFlowValue();
-		System.out.println("The value of the flow: "+ flowValue);
+		System.out.println("The value of the flow: "+ f.getFlow());
+		
 	}
 }

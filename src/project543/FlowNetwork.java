@@ -42,6 +42,8 @@ public class FlowNetwork {
 				//data[0] is the capacity, data[1] is flow of this edge
 				}
 		}
+		
+		
 	}
 	/**
      * Return the source vertex
@@ -91,12 +93,15 @@ public class FlowNetwork {
 		return max;
 	}
 	
+	
+	
 	/**
      * Initialize preflow and labeling. 
      * Set each vertex with an array representing value of excess and height.
      * Set s with height equal to the number of vertices in the graph, other vertices with 0 height.
      * Set the edges adjacent to s with flow equal to capacity.
      * Set the vertices adjacent to s with excess equal to the capacity of the edge from s 
+     * Set current flow value by adding the capacity of edges coming out of s
      */
 	public void InitialPreFlow(){
 		
@@ -116,16 +121,19 @@ public class FlowNetwork {
 				label[1]=0;
 				v.setData(label);
 			}
+			
 		}
 		for(m=G.incidentEdges(s);m.hasNext();){
 			e = (Edge) m.next();
 			int[] flows = (int[]) e.getData();
 			flows[1]=flows[0];
+			flow+=flows[0];
 			Vertex second=e.getSecondEndpoint();
 			int[] label2 = (int[]) second.getData();
 			label2[0] = flows[0];
 			System.out.println("Initial excess of "+ second.getName()+" adjacent to s to be "+ label2[0]);
 		}
+		System.out.println("******current flow is "+ flow);
 	}
 	
 	/**
@@ -143,7 +151,10 @@ public class FlowNetwork {
 					return v;
 			}
 		}
+		
 		return null;
+		
+		
 	}
 	
 	/**
@@ -170,6 +181,7 @@ public class FlowNetwork {
 				label2[0]+=d;
 				System.out.println("flow from "+v.getName()+" to "+ second.getName()+ " increased to "+flows[1]+" and excess of "+ v.getName()+ " decreased to "+ label[0]);
 				updated = true;
+				
 			}
 			
 			if(second==v){
@@ -180,12 +192,21 @@ public class FlowNetwork {
 					flows[1]-=d;
 					label[0]-=d;
 					label1[0]+=d;
+					if(first==s){
+						flow-=d;
+						System.out.println("******current flow is "+ flow);
+						//decrease the flow value as it is a backward edge to s
+					}
 					System.out.println("flow from "+first.getName()+" to "+ v.getName()+ " decreased to "+flows[1]+" and excess of "+ v.getName()+ " decreased to "+ label[0]);
 					updated = true;
+					
 				}
 			}
 			
-			if(label[0]==0) break;
+			if(label[0]==0) {
+				
+				break;
+			}
 			if(!m.hasNext()&&label[0]!=0) return false;
 			//if no more adjacent edges to push but excess is still greater than 0
 		}
@@ -207,7 +228,7 @@ public class FlowNetwork {
      * @return value of flow
      */
 	
-	public int getFlowValue(){
+	public int CaculateFlowValueFromS(){
 		Iterator m;
 		Edge e;
 		int flowValue=0;
@@ -216,7 +237,6 @@ public class FlowNetwork {
 			int[] flows = (int[]) e.getData();
 			flowValue+=flows[1];
 		}
-		flow = flowValue;
 		return flowValue;
 	}
 	
