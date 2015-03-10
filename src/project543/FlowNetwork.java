@@ -15,6 +15,7 @@ public class FlowNetwork {
 	private Vertex s;
 	private Vertex t;
 	private int flow;
+	private int C;
 	
 	/**
      * Constructor for the Flow Network with input SimpleGraph. Set every Edge
@@ -29,6 +30,7 @@ public class FlowNetwork {
 		this.s=s;
 		this.t=t;
 		flow = 0;
+		C=0;
 		
 		Iterator m;
 		Edge e;
@@ -40,10 +42,11 @@ public class FlowNetwork {
 				int[] data = {cur,0};
 				e.setData(data);
 				//data[0] is the capacity, data[1] is flow of this edge
+				if(e.getFirstEndpoint()==s){
+					C+=data[0];
+					}
 				}
 		}
-		
-		
 	}
 	/**
      * Return the source vertex
@@ -76,6 +79,15 @@ public class FlowNetwork {
 	public int getFlow(){
 		return flow;
 	}
+	
+	/**
+     * Return the value of C
+     * @return value of the C
+     */
+	public int getC(){
+		return C;
+	}
+	
 	
 	/**
      * Return the maximum flow capacity of all edges

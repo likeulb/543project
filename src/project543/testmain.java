@@ -11,6 +11,9 @@ public class testmain {
 		
 		SimpleGraph g1=new SimpleGraph();
 		Hashtable table = GraphInput.LoadSimpleGraph(g1);
+		
+		long timestart = System.currentTimeMillis();
+		
 		Vertex s = (Vertex)table.get("s");
 		Vertex t = (Vertex)table.get("t");
 		
@@ -18,7 +21,7 @@ public class testmain {
 		
 		MaxFlow test1 = new MaxFlow(G1);
 		
-		long timestart = System.currentTimeMillis();
+		
 		
 		//test1.F_F();
 		//test1.Scaling(G1.getMaxCapacity());
@@ -26,6 +29,7 @@ public class testmain {
 		
 		System.out.println("............");
 		System.out.println(System.currentTimeMillis()-timestart+" ms");
+		System.out.println("The C of this graph is "+ G1.getC());
 		
 		
 	}
